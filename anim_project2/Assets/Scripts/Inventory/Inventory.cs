@@ -45,14 +45,34 @@ public class Inventory : MonoBehaviour
 	//}
 	
 
-	public bool Add (Item item)
+	public bool AddItem (Item item)
 	{
-		items.Add(item);
+		if (IsFull())
+			return false;
 		
+		
+		items.Add(item);
 		if (onItemChangedCallback != null)
 			onItemChangedCallback.Invoke();
 		
 		return true;
+	}
+	
+	public bool RemoveItem (Item item)
+	{
+		if (items.Remove(item))
+		{
+			if (onItemChangedCallback != null)
+			onItemChangedCallback.Invoke();
+		
+			return true;
+		}
+		return false;
+	}
+	
+	public bool IsFull ()
+	{
+		return items.Count >= itemSlots.Length;
 	}
 	
 	private void RefreshUI ()

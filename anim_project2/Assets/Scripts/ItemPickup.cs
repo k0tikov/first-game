@@ -20,7 +20,7 @@ public class ItemPickup : Interactable {
 		//FindObjectOfType<Inventory>().Add(item);
 		//add to inventory
 				//вызов функции ADD из класса инвентарь при клике на объект
-		bool wasPickedUp = Inventory.instance.Add(item);
+		bool wasPickedUp = Inventory.instance.AddItem(item);
 				//если удачный метод поднятия (мы смогли добавить объект в инвентарь, то удаляем этот объект со сцены
 		if (wasPickedUp)
 			Destroy(gameObject);
