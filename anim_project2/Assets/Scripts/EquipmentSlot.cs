@@ -3,17 +3,11 @@ public class EquipmentSlot : ItemSlot
 {
 	public EquipmentType EquipmentType;
 	
-	
-	
-	void Start ()
-	{
-		gameObject.name = EquipmentType.ToString() + " Slot";
-	}
-	/*protected override OnValidate ()
+	protected override void OnValidate ()
 	{
 		base.OnValidate();
 		gameObject.name = EquipmentType.ToString() + " Slot";
 		
-	}*/
+	}
 
 }

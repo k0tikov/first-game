@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,45 +17,55 @@ public class Inventory : MonoBehaviour
 		}
 		instance = this;
 		
+		for (int i = 0; i < itemSlots.Length; i++)
+		{
+			itemSlots[i].OnRightClickEvent += OnItemRightClickedEvent;
+		}
 	}
 	#endregion
 	
-	public Transform itemsParent;
-	public ItemSlot[] itemSlots;
-	public List <Item> items;
+	[SerializeField] List <Item> items;
+	[SerializeField] Transform itemsParent;
+	[SerializeField] ItemSlot[] itemSlots;
 	
-	public delegate void OnItemChanged();
-	public OnItemChanged onItemChangedCallback;
+	public event Action<Item> OnItemRightClickedEvent;
 	
-	Inventory inventory;
+	public Inventory inventory;
 	
-	
-	void Start ()
+	private void  OnValidate ()
 	{
-		
 		inventory = Inventory.instance;
-		inventory.onItemChangedCallback += RefreshUI;
+		//inventory.onItemChangedCallback += RefreshUI;
+		if (itemsParent != null)
+			itemSlots = itemsParent.GetComponentsInChildren<ItemSlot>();
 		
-		itemSlots = itemsParent.GetComponentsInChildren<ItemSlot>();
+		RefreshUI();
 	}
-	//private void OnValidate ()
-	//{
-		//if (itemsParent != null)
-		//itemSlots = itemsParent.GetComponentsInChildren<ItemSlot>();
-		//RefreshUI();
-	//}
+
 	
+	public bool ItemPickUp (Item item)
+	{
+		if (IsFull())
+		{
+			return false;
+		}
+		
+		items.Add(item);
+		// (onItemChangedCallback != null)
+			//ItemChangedCallback.Invoke();
+		RefreshUI ();
+		return true;
+	}
 
 	public bool AddItem (Item item)
 	{
 		if (IsFull())
+		{
 			return false;
-		
+		}
 		
 		items.Add(item);
-		if (onItemChangedCallback != null)
-			onItemChangedCallback.Invoke();
-		
+		RefreshUI ();
 		return true;
 	}
 	
@@ -62,11 +73,13 @@ public class Inventory : MonoBehaviour
 	{
 		if (items.Remove(item))
 		{
-			if (onItemChangedCallback != null)
-			onItemChangedCallback.Invoke();
-		
+			Debug.Log("REMOVING");
+			// (onItemChangedCallback != null)
+			//ItemChangedCallback.Invoke();
+			RefreshUI ();
 			return true;
 		}
+		//Debug.LogWarning("ITS WORKING");
 		return false;
 	}
 	
@@ -89,6 +102,6 @@ public class Inventory : MonoBehaviour
 		{
 			itemSlots[i].Item = null;
 		}
-		Debug.LogWarning("ITS WORKING");
+		
 	}
 }
