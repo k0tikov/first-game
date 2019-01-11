@@ -1,16 +1,32 @@
 ﻿using UnityEngine;
 
-public class InventoryManager : MonoBehaviour 
+public class Character : MonoBehaviour 
 {
+	public CharacterStat armor;
+	public CharacterStat damage;
+	public CharacterStat agility;
 	
+	
+	
+	private Character inventoryManager;
 	public Inventory inventory;
 	public EquipmentPanel equipmentPanel;
-	
+	public GameObject closeHUD;
 	
 	void Awake ()
 	{
 		inventory.OnItemRightClickedEvent += EquipFromInventory;
 		equipmentPanel.OnItemRightClickedEvent += UnequipFromEquipPanel;
+	}
+	
+
+	void Update ()
+	{
+		
+		if (Input.GetButtonDown("HUD"))
+		{ 
+			closeHUD.SetActive(!closeHUD.activeSelf);
+		}
 	}
 	
 	
