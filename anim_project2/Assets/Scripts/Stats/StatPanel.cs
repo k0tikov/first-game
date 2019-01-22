@@ -16,15 +16,22 @@ public class StatPanel : MonoBehaviour
 	public void SetStats(params CharacterStat[] charStats)
 	{
 		stats = charStats;
+		
+		
+		for (int i = 0; i < statDisplays.Length; i++)
+		{
+			Debug.Log(stats[i].Value);
+			statDisplays[i].gameObject.SetActive(i < stats.Length);
+		}
 	}
 	
-	/*public void UpdateStatValues ()
+	public void UpdateStatValues ()
 	{
 		for (int i = 0; i < stats.Length; i++)
 		{
 			statDisplays[i].ValueText.text = stats[i].Value.ToString();
 		}
-	}*/
+	}
 	
 	public void UpdateStatNames ()
 	{

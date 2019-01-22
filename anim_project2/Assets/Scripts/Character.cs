@@ -1,20 +1,26 @@
 ﻿using UnityEngine;
 
+
 public class Character : MonoBehaviour 
 {
-	public CharacterStat armor;
-	public CharacterStat damage;
-	public CharacterStat agility;
-	
+
+	public CharacterStat Strength;
+	public CharacterStat Agility;
+	public CharacterStat Intelligence;
+	public CharacterStat Vitality;
 	
 	
 	private Character inventoryManager;
 	public Inventory inventory;
 	public EquipmentPanel equipmentPanel;
+	public StatPanel statPanel;
 	public GameObject closeHUD;
 	
 	void Awake ()
 	{
+		statPanel.SetStats(Strength, Agility, Intelligence, Vitality);
+		statPanel.UpdateStatValues();
+		
 		inventory.OnItemRightClickedEvent += EquipFromInventory;
 		equipmentPanel.OnItemRightClickedEvent += UnequipFromEquipPanel;
 	}
@@ -32,9 +38,11 @@ public class Character : MonoBehaviour
 	
 	private void EquipFromInventory(Item item)
 	{
+		Debug.Log("i pressed it");
 		if (item is EquippableItem)
 		{
 			Equip((EquippableItem)item);
+			Debug.Log("this shit is working");
 		}
 	}
 	
@@ -50,17 +58,18 @@ public class Character : MonoBehaviour
 	public void Equip (EquippableItem item)
 	{
 		if (inventory.RemoveItem(item))
-			Debug.Log("this shit is working");
 		{
 			EquippableItem previousItem;
 			if (equipmentPanel.AddItem(item, out previousItem))
 			{
-				
-				//nventory.AddItem(previousItem);
 				if (previousItem != null)
 				{
 					inventory.AddItem(previousItem);
+					previousItem.Unequip(this);
+					statPanel.UpdateStatValues();
 				}
+				item.Equip(this);
+				statPanel.UpdateStatValues();
 			}
 			else
 			{
@@ -73,6 +82,8 @@ public class Character : MonoBehaviour
 	{
 		if (!inventory.IsFull() && equipmentPanel.RemoveItem(item))
 		{
+			item.Unequip(this);
+			statPanel.UpdateStatValues();
 			inventory.AddItem(item);
 		}
 	}
