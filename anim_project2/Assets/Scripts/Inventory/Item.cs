@@ -3,7 +3,7 @@
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 public class Item : ScriptableObject {
 
-	new public string name = "New Item";	//переопределяем все настройки для имени и присваиваем явно наименование
+	new public string ItemName = "New Item";	//переопределяем все настройки для имени и присваиваем явно наименование
 	public Sprite icon;	//иконка пустая Item icon
 	//public bool isDefaultItem = false;
 
